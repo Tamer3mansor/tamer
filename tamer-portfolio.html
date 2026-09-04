@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tamer Mansor — Backend Developer</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0a0f1a;
+    --surface: #111827;
+    --surface2: #1a2236;
+    --border: rgba(255,255,255,0.07);
+    --border-strong: rgba(255,255,255,0.13);
+    --text: #e8edf5;
+    --text-muted: #6b7a99;
+    --text-dim: #94a3b8;
+    --accent: #3b82f6;
+    --accent-glow: rgba(59,130,246,0.15);
+    --accent2: #06b6d4;
+    --green: #10b981;
+    --purple: #8b5cf6;
+    --mono: 'JetBrains Mono', monospace;
+    --sans: 'Inter', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--sans);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    font-size: 15px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1rem 2rem;
+    background: rgba(10,15,26,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-family: var(--mono);
+    font-size: 14px;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+  }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a {
+    font-size: 13px; color: var(--text-muted); text-decoration: none;
+    letter-spacing: 0.03em; transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--text); }
+
+  /* SECTIONS */
+  section { padding: 6rem 0; }
+  .container { max-width: 960px; margin: 0 auto; padding: 0 2rem; }
+
+  /* HERO */
+  #hero {
+    min-height: 100vh;
+    display: flex; align-items: center;
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+  }
+  #hero::before {
+    content: '';
+    position: absolute;
+    top: -20%; left: 50%;
+    transform: translateX(-50%);
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(59,130,246,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-inner {
+    max-width: 960px; margin: 0 auto; padding: 0 2rem;
+    width: 100%;
+  }
+  .hero-tag {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: var(--mono); font-size: 12px;
+    color: var(--accent); border: 1px solid rgba(59,130,246,0.3);
+    padding: 4px 12px; border-radius: 100px;
+    margin-bottom: 1.5rem;
+    background: rgba(59,130,246,0.05);
+  }
+  .hero-tag::before {
+    content: ''; width: 6px; height: 6px;
+    background: var(--green); border-radius: 50%;
+    animation: pulse 2s ease infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+  h1 {
+    font-size: clamp(2.4rem, 6vw, 4rem);
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    margin-bottom: 0.3rem;
+  }
+  .hero-name-accent { color: var(--accent); }
+  .hero-role {
+    font-family: var(--mono);
+    font-size: clamp(1rem, 2.5vw, 1.3rem);
+    color: var(--text-dim);
+    margin-bottom: 1.5rem;
+    letter-spacing: 0.02em;
+  }
+  .hero-bio {
+    font-size: 15px; line-height: 1.75;
+    color: var(--text-dim);
+    max-width: 600px;
+    margin-bottom: 2.5rem;
+  }
+  .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 22px; border-radius: 8px;
+    font-size: 14px; font-weight: 500;
+    text-decoration: none; cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-primary {
+    background: var(--accent); color: #fff;
+  }
+  .btn-primary:hover { background: #2563eb; transform: translateY(-1px); }
+  .btn-outline {
+    border: 1px solid var(--border-strong);
+    color: var(--text-dim);
+    background: transparent;
+  }
+  .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+
+  .hero-stats {
+    display: flex; gap: 2.5rem; margin-top: 3rem;
+    padding-top: 2.5rem;
+    border-top: 1px solid var(--border);
+  }
+  .stat-num {
+    font-size: 1.8rem; font-weight: 600;
+    color: var(--text); letter-spacing: -0.03em;
+    display: block;
+  }
+  .stat-label {
+    font-size: 12px; color: var(--text-muted);
+    font-family: var(--mono);
+  }
+
+  /* SECTION TITLES */
+  .section-label {
+    font-family: var(--mono); font-size: 11px;
+    color: var(--accent); letter-spacing: 0.12em;
+    text-transform: uppercase; margin-bottom: 0.6rem;
+  }
+  .section-title {
+    font-size: 1.8rem; font-weight: 600;
+    letter-spacing: -0.02em; margin-bottom: 0.5rem;
+  }
+  .section-sub {
+    color: var(--text-muted); font-size: 14px; margin-bottom: 3rem;
+  }
+
+  /* EXPERIENCE */
+  .exp-item {
+    display: grid; grid-template-columns: 1fr auto;
+    gap: 0.3rem 1rem;
+    padding: 1.75rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 1rem;
+    position: relative;
+    transition: border-color 0.2s;
+  }
+  .exp-item:hover { border-color: var(--border-strong); }
+  .exp-item::before {
+    content: '';
+    position: absolute; left: 0; top: 0; bottom: 0;
+    width: 3px; border-radius: 12px 0 0 12px;
+    background: var(--accent);
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .exp-item:hover::before { opacity: 1; }
+  .exp-company {
+    font-size: 15px; font-weight: 600; color: var(--text);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .exp-badge {
+    font-size: 10px; font-family: var(--mono);
+    background: var(--accent-glow); color: var(--accent);
+    border: 1px solid rgba(59,130,246,0.25);
+    padding: 2px 8px; border-radius: 100px;
+  }
+  .exp-date {
+    font-family: var(--mono); font-size: 11px;
+    color: var(--text-muted); text-align: right;
+    white-space: nowrap;
+  }
+  .exp-title {
+    font-size: 13px; color: var(--text-dim); grid-column: 1;
+    margin-bottom: 1rem;
+  }
+  .exp-desc {
+    grid-column: 1 / -1;
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .exp-desc li {
+    font-size: 13.5px; color: var(--text-dim);
+    display: flex; gap: 8px; line-height: 1.55;
+    list-style: none;
+  }
+  .exp-desc li::before {
+    content: '→'; color: var(--accent);
+    font-size: 12px; margin-top: 2px; flex-shrink: 0;
+  }
+  .tech-row {
+    grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 6px;
+    margin-top: 0.75rem; padding-top: 0.75rem;
+    border-top: 1px solid var(--border);
+  }
+  .tech-tag {
+    font-family: var(--mono); font-size: 11px;
+    color: var(--text-muted); padding: 3px 10px;
+    background: var(--surface2);
+    border: 1px solid var(--border); border-radius: 6px;
+  }
+
+  /* PROJECTS */
+  .projects-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+  }
+  .project-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 1.5rem;
+    display: flex; flex-direction: column; gap: 0.75rem;
+    text-decoration: none; color: inherit;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .project-card:hover {
+    border-color: var(--border-strong);
+    transform: translateY(-2px);
+  }
+  .project-header {
+    display: flex; justify-content: space-between; align-items: flex-start;
+  }
+  .project-icon {
+    width: 36px; height: 36px; border-radius: 8px;
+    background: var(--accent-glow); border: 1px solid rgba(59,130,246,0.2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+  }
+  .project-live {
+    font-family: var(--mono); font-size: 10px;
+    background: rgba(16,185,129,0.1); color: var(--green);
+    border: 1px solid rgba(16,185,129,0.25);
+    padding: 3px 9px; border-radius: 100px;
+  }
+  .project-name {
+    font-size: 15px; font-weight: 600; color: var(--text);
+  }
+  .project-desc {
+    font-size: 13px; color: var(--text-muted); line-height: 1.6;
+    flex: 1;
+  }
+  .project-tags {
+    display: flex; flex-wrap: wrap; gap: 5px;
+  }
+  .project-tag {
+    font-family: var(--mono); font-size: 10px;
+    color: var(--text-muted); padding: 2px 8px;
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 4px;
+  }
+
+  /* SKILLS */
+  .skills-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+  .skill-group {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 1.25rem;
+  }
+  .skill-group-title {
+    font-size: 11px; font-family: var(--mono);
+    color: var(--text-muted); text-transform: uppercase;
+    letter-spacing: 0.08em; margin-bottom: 1rem;
+  }
+  .skill-item {
+    display: flex; align-items: center; gap: 8px;
+    padding: 5px 0;
+    font-size: 13.5px; color: var(--text-dim);
+    border-bottom: 1px solid var(--border);
+  }
+  .skill-item:last-child { border-bottom: none; }
+  .skill-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--accent); flex-shrink: 0;
+  }
+  .skill-dot.green { background: var(--green); }
+  .skill-dot.purple { background: var(--purple); }
+  .skill-dot.cyan { background: var(--accent2); }
+
+  /* ACHIEVEMENTS */
+  .achieve-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1rem; }
+  .achieve-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 1.25rem 1.5rem;
+    display: flex; align-items: center; gap: 1rem;
+  }
+  .achieve-icon {
+    font-size: 24px; flex-shrink: 0;
+    width: 48px; height: 48px; border-radius: 10px;
+    background: var(--surface2); display: flex; align-items: center; justify-content: center;
+  }
+  .achieve-title { font-size: 14px; font-weight: 500; color: var(--text); }
+  .achieve-sub { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+  /* CONTACT */
+  #contact { background: var(--surface); border-top: 1px solid var(--border); }
+  .contact-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start;
+  }
+  .contact-text h2 { font-size: 1.6rem; font-weight: 600; margin-bottom: 0.5rem; }
+  .contact-text p { color: var(--text-dim); font-size: 14px; line-height: 1.7; }
+  .contact-links { display: flex; flex-direction: column; gap: 0.75rem; margin-top: 1.5rem; }
+  .contact-link {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 14px; color: var(--text-dim);
+    text-decoration: none; padding: 10px 14px;
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 8px; transition: all 0.2s;
+  }
+  .contact-link:hover { border-color: var(--accent); color: var(--accent); }
+  .contact-link-icon { font-size: 16px; opacity: 0.7; }
+
+  /* FOOTER */
+  footer {
+    padding: 2rem; text-align: center;
+    font-family: var(--mono); font-size: 12px;
+    color: var(--text-muted); border-top: 1px solid var(--border);
+  }
+
+  /* DIVIDER */
+  .divider { height: 1px; background: var(--border); margin: 0; }
+
+  /* RESPONSIVE */
+  @media (max-width: 640px) {
+    nav { padding: 1rem; }
+    .nav-links { display: none; }
+    .hero-stats { gap: 1.5rem; flex-wrap: wrap; }
+    .contact-grid { grid-template-columns: 1fr; gap: 2rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <span class="nav-logo">tamer.dev</span>
+  <ul class="nav-links">
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-inner">
+    <div class="hero-tag">Available for opportunities</div>
+    <h1>
+      <span style="color: var(--text-dim); font-weight: 300; font-size: 70%;">Hi, I'm </span><br>
+      <span class="hero-name-accent">Tamer Mansor</span>
+    </h1>
+    <p class="hero-role">// Backend Developer · Laravel · PHP · API Architect</p>
+    <p class="hero-bio">
+      Computer Science graduate from Menofia University, building scalable production APIs
+      and backend systems at Nami. I've shipped 8+ live applications across Saudi Arabia
+      and Mauritania — from real estate to AI-powered religious services apps.
+    </p>
+    <div class="hero-actions">
+      <a href="#projects" class="btn btn-primary">View Projects</a>
+      <a href="https://github.com/Tamer3mansor" target="_blank" class="btn btn-outline">GitHub</a>
+      <a href="https://www.linkedin.com/in/tamer-mansor-05b713258/" target="_blank" class="btn btn-outline">LinkedIn</a>
+    </div>
+    <div class="hero-stats">
+      <div>
+        <span class="stat-num">8+</span>
+        <span class="stat-label">Production apps</span>
+      </div>
+      <div>
+        <span class="stat-num">3</span>
+        <span class="stat-label">Companies</span>
+      </div>
+      <div>
+        <span class="stat-num">ICPC</span>
+        <span class="stat-label">Participant × 2</span>
+      </div>
+      <div>
+        <span class="stat-num">AI</span>
+        <span class="stat-label">Gemini · ChatGPT</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="container">
+    <p class="section-label">Work history</p>
+    <h2 class="section-title">Experience</h2>
+    <p class="section-sub">Building production software at scale</p>
+
+    <!-- Nami -->
+    <div class="exp-item">
+      <div class="exp-company">
+        Nami
+        <span class="exp-badge">Current</span>
+      </div>
+      <div class="exp-date">May 2025 – Present</div>
+      <div class="exp-title">Backend Developer · Menofia</div>
+      <ul class="exp-desc">
+        <li>Built and maintained 8+ production applications across Saudi Arabia and Mauritania — real estate, logistics, e-commerce, and religious services.</li>
+        <li>Designed scalable RESTful APIs consumed by mobile and web clients using Repository Pattern and Service Layer architecture.</li>
+        <li>Integrated Gemini and ChatGPT APIs into a production mobile app, delivering intelligent chat experiences to end users.</li>
+        <li>Designed database schemas from scratch and managed complex Eloquent relationships for data-intensive applications.</li>
+        <li>Delivered full admin dashboards independently on multiple projects, enabling non-technical client management.</li>
+        <li>Implemented multi-language (i18n) support and dynamic content management using Laravel Blade.</li>
+      </ul>
+      <div class="tech-row">
+        <span class="tech-tag">Laravel 11</span>
+        <span class="tech-tag">PHP 8</span>
+        <span class="tech-tag">MySQL</span>
+        <span class="tech-tag">REST API</span>
+        <span class="tech-tag">Socket.io</span>
+        <span class="tech-tag">Gemini API</span>
+        <span class="tech-tag">ChatGPT API</span>
+        <span class="tech-tag">Git</span>
+      </div>
+    </div>
+
+    <!-- Blue Technology -->
+    <div class="exp-item">
+      <div class="exp-company">Blue Technology</div>
+      <div class="exp-date">Mar 2025 – May 2025</div>
+      <div class="exp-title">Backend Developer · Menofia</div>
+      <ul class="exp-desc">
+        <li>Built and integrated RESTful APIs and optimized database structures in a collaborative team environment.</li>
+        <li>Applied clean code principles and backend best practices in a production setting.</li>
+      </ul>
+      <div class="tech-row">
+        <span class="tech-tag">Laravel</span>
+        <span class="tech-tag">PHP</span>
+        <span class="tech-tag">MySQL</span>
+        <span class="tech-tag">Git</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="container">
+    <p class="section-label">What I've built</p>
+    <h2 class="section-title">Projects</h2>
+    <p class="section-sub">Production applications shipped for real users</p>
+
+    <div class="projects-grid">
+
+      <a class="project-card" href="https://suq-aleaqar.nami-tec.com/" target="_blank">
+        <div class="project-header">
+          <div class="project-icon">🏠</div>
+          <span class="project-live">Live</span>
+        </div>
+        <div class="project-name">Suq Al-Aqar</div>
+        <p class="project-desc">Real estate marketplace — built solo end-to-end. Advanced property search, real-time chat between buyers and sellers, and a full admin dashboard.</p>
+        <div class="project-tags">
+          <span class="project-tag">Laravel</span>
+          <span class="project-tag">Socket.io</span>
+          <span class="project-tag">MySQL</span>
+          <span class="project-tag">Admin Panel</span>
+        </div>
+      </a>
+
+      <div class="project-card">
+        <div class="project-header">
+          <div class="project-icon">🕌</div>
+          <span class="project-live">Play Store</span>
+        </div>
+        <div class="project-name">Al-Himyari</div>
+        <p class="project-desc">Hajj pilgrims services app — dual AI chat (Gemini + ChatGPT), group management, announcements. Published on Google Play with real users.</p>
+        <div class="project-tags">
+          <span class="project-tag">Gemini API</span>
+          <span class="project-tag">ChatGPT API</span>
+          <span class="project-tag">Laravel</span>
+          <span class="project-tag">Mobile API</span>
+        </div>
+      </div>
+
+      <a class="project-card" href="https://alnahdi-office.com/" target="_blank">
+        <div class="project-header">
+          <div class="project-icon">🏢</div>
+          <span class="project-live">Live</span>
+        </div>
+        <div class="project-name">Al-Nahdi Family Office</div>
+        <p class="project-desc">Digital platform for one of Saudi Arabia's prominent family offices — service requests, content management, document handling, and admin dashboard.</p>
+        <div class="project-tags">
+          <span class="project-tag">Laravel</span>
+          <span class="project-tag">PHP</span>
+          <span class="project-tag">CMS</span>
+          <span class="project-tag">Sole Dev</span>
+        </div>
+      </a>
+
+      <a class="project-card" href="https://app-lorry.com" target="_blank">
+        <div class="project-header">
+          <div class="project-icon">🚛</div>
+          <span class="project-live">Live</span>
+        </div>
+        <div class="project-name">Lorry</div>
+        <p class="project-desc">Freight & transport negotiation app — shipment posting, driver matching, real-time price negotiation and in-trip chat via WebSockets.</p>
+        <div class="project-tags">
+          <span class="project-tag">Socket.io</span>
+          <span class="project-tag">WebSockets</span>
+          <span class="project-tag">Laravel</span>
+          <span class="project-tag">Real-time</span>
+        </div>
+      </a>
+
+      <a class="project-card" href="https://mqane.com/" target="_blank">
+        <div class="project-header">
+          <div class="project-icon">🐄</div>
+          <span class="project-live">Live</span>
+        </div>
+        <div class="project-name">Mqane</div>
+        <p class="project-desc">Livestock farm management — high-traffic production system across Saudi Arabia. Built the Veterinarian Module for livestock health records, zero-downtime deployments.</p>
+        <div class="project-tags">
+          <span class="project-tag">Laravel</span>
+          <span class="project-tag">MySQL</span>
+          <span class="project-tag">High-traffic</span>
+          <span class="project-tag">Module Dev</span>
+        </div>
+      </a>
+
+      <a class="project-card" href="https://www.moriapp.net/" target="_blank">
+        <div class="project-header">
+          <div class="project-icon">🍔</div>
+          <span class="project-live">Live</span>
+        </div>
+        <div class="project-name">Morry</div>
+        <p class="project-desc">Food delivery app — admin dashboard for orders, delivery agents, and restaurants. Supported Mauritania market launch.</p>
+        <div class="project-tags">
+          <span class="project-tag">Laravel</span>
+          <span class="project-tag">Admin Panel</span>
+          <span class="project-tag">Logistics</span>
+        </div>
+      </a>
+
+      <div class="project-card">
+        <div class="project-header">
+          <div class="project-icon">🏡</div>
+          <span style="font-family: var(--mono); font-size: 10px; color: var(--text-muted);">Handoff</span>
+        </div>
+        <div class="project-name">Aysh</div>
+        <p class="project-desc">Short-term rental platform (Airbnb-style) — designed the full database schema, built core booking flow, user auth, and property listings. Handed off stable codebase.</p>
+        <div class="project-tags">
+          <span class="project-tag">Laravel</span>
+          <span class="project-tag">DB Design</span>
+          <span class="project-tag">Booking API</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="container">
+    <p class="section-label">Technical profile</p>
+    <h2 class="section-title">Skills</h2>
+    <p class="section-sub">Languages, frameworks, and tools</p>
+
+    <div class="skills-grid">
+      <div class="skill-group">
+        <div class="skill-group-title">Core</div>
+        <div class="skill-item"><span class="skill-dot"></span>PHP 8</div>
+        <div class="skill-item"><span class="skill-dot"></span>Laravel 11</div>
+        <div class="skill-item"><span class="skill-dot"></span>MySQL</div>
+        <div class="skill-item"><span class="skill-dot"></span>REST API design</div>
+      </div>
+      <div class="skill-group">
+        <div class="skill-group-title">Backend</div>
+        <div class="skill-item"><span class="skill-dot green"></span>Node.js</div>
+        <div class="skill-item"><span class="skill-dot green"></span>Express.js</div>
+        <div class="skill-item"><span class="skill-dot green"></span>MongoDB</div>
+        <div class="skill-item"><span class="skill-dot green"></span>Socket.io</div>
+      </div>
+      <div class="skill-group">
+        <div class="skill-group-title">AI & Services</div>
+        <div class="skill-item"><span class="skill-dot purple"></span>Gemini API</div>
+        <div class="skill-item"><span class="skill-dot purple"></span>ChatGPT API</div>
+        <div class="skill-item"><span class="skill-dot purple"></span>AI integration</div>
+        <div class="skill-item"><span class="skill-dot purple"></span>3rd-party APIs</div>
+      </div>
+      <div class="skill-group">
+        <div class="skill-group-title">Concepts</div>
+        <div class="skill-item"><span class="skill-dot cyan"></span>Repository Pattern</div>
+        <div class="skill-item"><span class="skill-dot cyan"></span>Service Layer</div>
+        <div class="skill-item"><span class="skill-dot cyan"></span>Data Structures</div>
+        <div class="skill-item"><span class="skill-dot cyan"></span>Algorithms</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ACHIEVEMENTS -->
+<section id="achievements">
+  <div class="container">
+    <p class="section-label">Milestones</p>
+    <h2 class="section-title">Education & Achievements</h2>
+    <p class="section-sub">Academic background and competitive programming</p>
+
+    <div class="achieve-grid">
+      <div class="achieve-card">
+        <div class="achieve-icon">🎓</div>
+        <div>
+          <div class="achieve-title">Menofia University</div>
+          <div class="achieve-sub">B.Sc. Computer Science · Class of 2023</div>
+        </div>
+      </div>
+      <div class="achieve-card">
+        <div class="achieve-icon">🏆</div>
+        <div>
+          <div class="achieve-title">ICPC 2021 — 27th Place</div>
+          <div class="achieve-sub">Menoufia University Programming Contest</div>
+        </div>
+      </div>
+      <div class="achieve-card">
+        <div class="achieve-icon">🏅</div>
+        <div>
+          <div class="achieve-title">ICPC 2019 — 30th Place</div>
+          <div class="achieve-sub">Menoufia University Programming Contest</div>
+        </div>
+      </div>
+      <div class="achieve-card">
+        <div class="achieve-icon">📚</div>
+        <div>
+          <div class="achieve-title">MEAN Stack Track — ITI</div>
+          <div class="achieve-sub">Full-stack JavaScript · June – Oct 2022</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="container">
+    <div class="contact-grid">
+      <div class="contact-text">
+        <p class="section-label">Get in touch</p>
+        <h2>Let's build something together</h2>
+        <p style="margin-top: 1rem;">
+          I'm open to backend roles, freelance projects, and interesting collaboration.
+          If you're looking for someone who ships reliable, scalable APIs — let's talk.
+        </p>
+      </div>
+      <div>
+        <div class="contact-links">
+          <a href="mailto:tamermansor371@gmail.com" class="contact-link">
+            <span class="contact-link-icon">✉</span>
+            tamermansor371@gmail.com
+          </a>
+          <a href="https://github.com/Tamer3mansor" target="_blank" class="contact-link">
+            <span class="contact-link-icon">⌥</span>
+            github.com/Tamer3mansor
+          </a>
+          <a href="https://www.linkedin.com/in/tamer-mansor-05b713258/" target="_blank" class="contact-link">
+            <span class="contact-link-icon">↗</span>
+            linkedin.com/in/tamer-mansor
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span style="color: var(--text-muted)">Built with care · </span>Tamer Mansor © 2025
+</footer>
+
+</body>
+</html>
